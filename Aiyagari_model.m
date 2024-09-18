@@ -239,3 +239,115 @@ ylabel('Asset Holding');
 legend('Lmin', 'Lmax');
 title('Asset Demand Functions: mu=5, rho=0.6, sig=0.2');
 grid on;
+
+%% Densities
+
+[f_w, xi_w] = ksdensity(sim_k);
+[f_c, xi_c] = ksdensity(sim_c);
+[f_y, xi_y] = ksdensity(sim_y);
+[f_s, xi_s] = ksdensity(sim_s);
+
+% Normalize the density estimates
+f_w_normalized = f_w / (sum(f_w)); 
+f_c_normalized = f_c / (sum(f_c)); 
+f_y_normalized = f_y / (sum(f_y));
+f_s_normalized = f_s / (sum(f_s));
+
+figure;
+plot(xi_w, f_w_normalized, '-b', 'LineWidth', 2);
+xlim([0,16]);
+title('Density of Wealth');
+xlabel('Value');
+ylabel('Density');
+grid on;
+
+figure;
+plot(xi_c, f_c_normalized, 'LineWidth', 2);
+hold on;
+plot(xi_y, f_y_normalized, 'LineWidth', 2);
+plot(xi_s, f_s_normalized, 'LineWidth', 2);
+% hold off;    
+title('Density Consumption, Net Income, and Savings');
+xlabel('Value');
+ylabel('Density');
+legend('Consumption', 'Net Income', 'Savings');
+grid on;
+
+%% Histograms
+
+figure;
+histogram(sim_k, 'Normalization', 'probability');
+xlim([0,16]);
+title('Histogram of Wealth');
+xlabel('Values');
+ylabel('Probability');
+
+figure;
+histogram(sim_c, 'Normalization', 'probability');
+title('Histogram of Consumption');
+xlabel('Value');
+ylabel('Probability');
+
+figure;
+histogram(sim_y, 'Normalization', 'probability');
+title('Histogram of Net Income');
+xlabel('Value');
+ylabel('Probability');
+
+figure;
+histogram(sim_s, 'Normalization', 'probability');
+title('Histogram of Savings');
+xlabel('Value');
+ylabel('Probability');
+
+%% Lorenz Curves
+
+% Sort the data
+sorted_k = sort(sim_k);
+sorted_c = sort(sim_c);
+sorted_y = sort(sim_y);
+sorted_s = sort(sim_s);
+
+% Compute the cumulative sum and the cumulative sum of population share
+cumulative_k = cumsum(sorted_k) / sum(sorted_k);
+cumulative_population_k = (1:length(sorted_k)) / length(sorted_k);
+
+cumulative_c = cumsum(sorted_c) / sum(sorted_c);
+cumulative_population_c = (1:length(sorted_c)) / length(sorted_c);
+
+cumulative_y = cumsum(sorted_y) / sum(sorted_y);
+cumulative_population_y = (1:length(sorted_y)) / length(sorted_y);
+
+cumulative_s = cumsum(sorted_s) / sum(sorted_s);
+cumulative_population_s = (1:length(sorted_s)) / length(sorted_s);
+
+% Calculate the area under the Lorenz curve
+lorenz_area_k = trapz(cumulative_population_k, cumulative_k);
+lorenz_area_c = trapz(cumulative_population_c, cumulative_c);
+lorenz_area_y = trapz(cumulative_population_y, cumulative_y);
+lorenz_area_s = trapz(cumulative_population_s, cumulative_s);
+
+% Calculate the Gini coefficient
+gini_coefficient_k = 1 - 2 * lorenz_area_k;
+gini_coefficient_c = 1 - 2 * lorenz_area_c;
+gini_coefficient_y = 1 - 2 * lorenz_area_y;
+gini_coefficient_s = 1 - 2 * lorenz_area_s;
+
+disp(['Gini Coefficient for Wealth: ', num2str(gini_coefficient_k)]);
+disp(['Gini Coefficient for Consumption: ', num2str(gini_coefficient_c)]);
+disp(['Gini Coefficient for Net Income: ', num2str(gini_coefficient_y)]);
+disp(['Gini Coefficient for Savings: ', num2str(gini_coefficient_s)]);
+
+% Plot the Lorenz Curve
+figure;
+plot(cumulative_population_k, cumulative_k, "b-", 'LineWidth', 2);
+hold on;
+plot(cumulative_population_c, cumulative_c, "r-", 'LineWidth', 2);
+plot(cumulative_population_y, cumulative_y, "y-", 'LineWidth', 2);
+plot(cumulative_population_s, cumulative_s, "g-", 'LineWidth', 2);
+plot([0 1], [0 1], 'k--'); % Line of equality
+xlabel('Cumulative Share of Population');
+ylabel('Cumulative Share of Wealth');
+title('Lorenz Curves');
+legend('Wealth', 'Consumption', 'Net Income', 'Savings');
+grid on;
