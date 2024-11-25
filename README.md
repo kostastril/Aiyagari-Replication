@@ -1,1 +1,1 @@
-The file replicates the steady state of the Aiyagari model (1994) and the extensions with endogenous labor supply and computes various distributions and inequality statistics.
+The files replicate the steady state of the Aiyagari model (1994) and the extension with endogenous labor supply and compute various distributions and inequality statistics. Both Value Function Iteration and Endogenous Grid Method are used for computation.
