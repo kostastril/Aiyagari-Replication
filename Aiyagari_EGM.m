@@ -61,7 +61,7 @@ r = 0.04; % Initial guess for interest rate
 w = (1 - alpha) * (alpha / (r + delta))^(alpha / (1 - alpha));
 
 % Initial guess for consumption policy
-policy_c = repmat((1 + r) * a_grid + w * mean(l_grid), 1, N);
+policy_c = repmat((1 + r) * a_grid + w * mean(s), 1, N);
 
 % Utility functions
 u = @(c) (c.^(1 - sigma)) / (1 - sigma);
