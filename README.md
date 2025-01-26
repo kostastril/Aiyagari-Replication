@@ -1,1 +1,3 @@
-The files replicate the steady state of the Aiyagari model (1994) and the extension with endogenous labor supply and compute various distributions and inequality statistics. Both Value Function Iteration and Endogenous Grid Method are used for computation.
+# Heterogeneous Agent Models
+
+This repository provides MATLAB implementations of various heterogeneous agent models commonly used in macroeconomics. The models are solved using both **Value Function Iteration (VFI)** and the **Endogenous Grid Method (EGM)**, with extensions for endogenous labor supply.
